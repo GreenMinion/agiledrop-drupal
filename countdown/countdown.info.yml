@@ -1,0 +1,6 @@
+name: Countdown Module
+description: Creates a block displaying how many days are left until the event starts.
+package: Custom
+
+type: module
+core: 8.x

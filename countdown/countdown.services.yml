@@ -1,0 +1,3 @@
+services:
+      countdown.countdown_service:
+        class: Drupal\countdown\Countdownservice

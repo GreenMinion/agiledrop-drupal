@@ -1,0 +1,7 @@
+countdown.content:
+  path: '/countdown'
+  defaults:
+    _controller: '\Drupal\countdown\CountdownController::content'
+    _title: 'Countdown'
+  requirements:
+    _permission: 'access content'

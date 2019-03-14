@@ -1,0 +1,6 @@
+countdown.admin:
+  title: 'Countdown module settings'
+  description: 'bringing a module to an admin settings page link'
+  parent: system.admin_config_development
+  route_name: countdown.content
+  weight: 100
