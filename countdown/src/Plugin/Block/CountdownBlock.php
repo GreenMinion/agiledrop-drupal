@@ -39,7 +39,7 @@ class CountdownBlock extends BlockBase implements BlockPluginInterface, Containe
      * @param mixed $plugin_definition
      *   The plugin definition.
      * @param \Drupal\countdown\Countdownservice $countdownservice
-     *   DB calls and date comparrisons.
+     *   Date comparrisons.
      */
     public function __construct(
         array $configuration,
@@ -73,15 +73,12 @@ class CountdownBlock extends BlockBase implements BlockPluginInterface, Containe
       $node = \Drupal::routeMatch()->getParameter('node');
 
       // Set variable for the block to be only shown in "event" pages
-      $nodeType = 'Event';
-
-      // Set variable for the block to be only shown in "event" pages
-      $nodeType = 'Event';
+      $nodeType = 'event';
 
       // Check if a current page is a node
       if ($node instanceof \Drupal\node\NodeInterface) {
           $nid = $node->id();
-          $nType= node_get_type_label($node);
+          $nType= $node->getType();
 
           // Get submitted date in countdown block. If empty provide the current date.
           if (!empty($config['countdown_block_date'])) {
@@ -92,7 +89,11 @@ class CountdownBlock extends BlockBase implements BlockPluginInterface, Containe
           }
 
           // Get the event date
-          $eventDate = $this->countdownservice->fetchEventDate($nid);
+            // Get event date object
+            //$eventDate = $node->get('field_event_date')->getValue();
+
+            // Get event date value
+            $eventDate = $node->field_event_date->value;
 
           // Compare the countdown_block_date and event date and get the string
           $dateStrig = $this->countdownservice->compareDateStrings($date, $eventDate);

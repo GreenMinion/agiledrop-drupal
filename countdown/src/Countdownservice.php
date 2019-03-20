@@ -7,53 +7,6 @@ namespace Drupal\countdown;
  */
 class Countdownservice {
 
-    /**
-     * Constructs a connection object.
-     *
-     */
-    public function __construct()
-    {
-        // Instantiate a connection object
-        $this->dataBase = \Drupal::database();
-    }
-
-    /*
-     * Query the database for specific event date
-     *
-     * @param (int) $nid
-     *
-     * @return
-     *    Date string
-     */
-    public function fetchEventDate($nid){
-        $returnDate = 0;
-
-        // The transaction opens here.
-        $txn = $this->dataBase->startTransaction();
-        try {
-            $query = $this->dataBase->select('node__field_event_date','eDate')
-            ->condition('eDate.entity_id', $nid, '=')
-            ->condition('eDate.deleted', 0, '=')
-            ->fields('eDate', ['field_event_date_value'])
-            ->execute();
-
-            $eDate = $query->fetchAssoc();
-
-            if(!empty($eDate)){
-                $returnDate = $eDate;
-            }
-        }
-        catch (Exception $e) {
-            // Something went wrong somewhere, so roll back now.
-            $txn->rollBack();
-            // Log the exception to watchdog.
-            \Drupal::logger('type')->error($e->getMessage());
-        }
-
-        return $returnDate;
-
-    }
-
     /*
      * Compares two dates and returns the string to be shown in CountDown Block
      *
@@ -68,7 +21,7 @@ class Countdownservice {
     public function compareDateStrings($date, $eventDate){
         // Provide the same date format for both variables
         $date = new \DateTime(date('Y-m-d',strtotime($date)));
-        $eventDate = new \DateTime(date('Y-m-d',strtotime($eventDate['field_event_date_value'])));
+        $eventDate = new \DateTime(date('Y-m-d',strtotime($eventDate)));
         $interval = (int)date_diff($date, $eventDate)->format('%R%a');
 
         $returnString = $this->returnDiffDateString($interval);
